@@ -6,7 +6,7 @@ namespace Web.Controllers;
 // /teams/
 public class TeamsController : Controller
 {
-    public List<string> Teams { get; set; } = new(); // maintain encapsulation
+    public static List<string> Teams { get; set; } = new(); // maintain encapsulation
 
     public TeamsController()
     {
@@ -19,5 +19,12 @@ public class TeamsController : Controller
     {
         ViewBag.Teams = Teams;
         return View();
+    }
+
+    public IActionResult Delete(int id)
+    {
+        // Delete the team from the list based on its index
+        Teams.RemoveAt(id);
+        return RedirectToAction("Index");
     }
 }

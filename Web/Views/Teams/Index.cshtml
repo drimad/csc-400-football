@@ -1,8 +1,23 @@
 ﻿<h1>List of Teams</h1>
 
-<ul class="list-group list-group-flush">
-    @foreach (var team in ViewBag.Teams)
-    {
-        <li class="list-group-item">@team</li>
-    }
-</ul>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Team</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody class="table-group-divider">
+     @for (var i=0; i< ViewBag.Teams.Count; i++)
+     {
+         <tr>
+             <th scope="row"></th>
+             <td>@ViewBag.Teams[i]</td>
+             <td>
+                 <a asp-controller="Teams" asp-action="Delete" asp-route-id="@i">X</a>
+             </td>
+         </tr>
+     }
+    </tbody>
+</table>
