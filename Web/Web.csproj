@@ -6,4 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+        <AdditionalFiles Include="Views\Teams2\Add.cshtml"/>
+        <AdditionalFiles Include="Views\Teams2\Edit.cshtml"/>
+        <AdditionalFiles Include="Views\Teams2\Index.cshtml"/>
+    </ItemGroup>
+
 </Project>

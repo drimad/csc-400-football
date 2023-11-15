@@ -1,0 +1,11 @@
+<form method="post" asp-controller="Teams" asp-action="Edit">
+
+    <input class="form-control form-control-lg" type="text" placeholder="Team Name"
+           name="newTeamName"
+           value="@ViewBag.name"/>
+    <input type="hidden" name="id" value="@ViewBag.id"/>
+    <p>
+        <button type="submit" class="btn btn-success">Save Team</button>
+    </p>
+
+</form>
