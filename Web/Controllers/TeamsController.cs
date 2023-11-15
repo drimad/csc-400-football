@@ -48,7 +48,10 @@ public class TeamsController : Controller
     public IActionResult Edit(int id)
     {
         // retrieve the current team name at the specified id index
+        var oldName = Teams[id];
         // send both id & current team name to the view through ViewBag
+        ViewBag.id = id;
+        ViewBag.name = oldName;
         return View();
     }
 
@@ -56,6 +59,7 @@ public class TeamsController : Controller
     public IActionResult Edit(int id, string newTeamName)
     {
         // replace the current team name with the new team name at the specified id/index
+        Teams[id] = newTeamName;
         return RedirectToAction("Index");
     }
 }
