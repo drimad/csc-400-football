@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Web.Data;
+using Web.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddControllersWithViews();
 // Add Entity Framework to my app
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
+
+builder.Services.AddScoped<TeamsRepo>();
 
 var app = builder.Build();
 
