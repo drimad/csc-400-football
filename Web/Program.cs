@@ -1,17 +1,20 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.Data;
+using Web.Models;
 using Web.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-
-// Add Entity Framework to my app
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("sqlite")));
 
-builder.Services.AddScoped<TeamsRepo>();
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => { options.Password.RequireLowercase = true; })
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<Teams3Repo>();
 
 var app = builder.Build();
 
@@ -28,6 +31,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
