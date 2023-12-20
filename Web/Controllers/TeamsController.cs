@@ -1,65 +1,57 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Web.Data;
+using Web.Models;
+using Web.Repos;
 
 namespace Web.Controllers;
 
-// /teams/
 public class TeamsController : Controller
 {
-    private static List<string> Teams { get; set; } = new()
-    {
-        "Barcelona", "PSG", "BayerMunich"
-    }; // maintain encapsulation
+    private readonly AppDbContext _dbContext;
+    private readonly ITeamsRepo _repo; //TODO still need to register this class in DI
 
-
-    // /teams/index
-    [HttpGet]
-    public IActionResult Index()
+    public TeamsController(AppDbContext dbContext, ITeamsRepo repo)
     {
-        ViewBag.Teams = Teams;
-        return View();
-    }
-
-    // /teams/delete/id
-    [HttpGet]
-    public IActionResult Delete(int id)
-    {
-        // Delete the team from the list based on its index
-        Teams.RemoveAt(id);
-        return RedirectToAction("Index");
-    }
-
-    // /teams/add
-    [HttpGet]
-    public IActionResult Add()
-    {
-        return View();
-    }
-
-    // /teams/add
-    [HttpPost]
-    public IActionResult Add(string teamName)
-    {
-        Teams.Add(teamName);
-        return RedirectToAction("Index");
+        // Constructor dependency injection
+        _dbContext = dbContext;
+        _repo = repo;
     }
 
     [HttpGet]
-    public IActionResult Edit(int id)
+    public async Task<IActionResult> IndexAsync()
     {
-        // retrieve the current team name at the specified id index
-        var oldName = Teams[id];
-        // send both id & current team name to the view through ViewBag
-        ViewBag.id = id;
-        ViewBag.name = oldName;
-        return View();
+        var teams = await _repo.GetAllAsync();
+        return View(teams);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAsync(int id)
+    {
+        var team = await _repo.GetAsync(id);
+        return View(team);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteAsync(int id)
+    {
+        await _repo.DeleteAsync(id);
+        return RedirectToAction("index");
     }
 
     [HttpPost]
-    public IActionResult Edit(int id, string newTeamName)
+    public async Task<IActionResult> CreateAsync(Team team)
     {
-        // replace the current team name with the new team name at the specified id/index
-        Teams[id] = newTeamName;
-        return RedirectToAction("Index");
+        if (ModelState.IsValid)
+            await _repo.CreateAsync(team);
+        return RedirectToAction("index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateAsync(Team team)
+    {
+        if (ModelState.IsValid)
+            await _repo.UpdateAsync(team);
+        return RedirectToAction("index");
     }
 }

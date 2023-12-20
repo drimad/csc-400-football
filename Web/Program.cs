@@ -14,7 +14,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options => { options.Passwor
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<Teams3Repo>();
+builder.Services.AddScoped<ITeamsRepo, TeamsRepoAsync>();
+
 
 var app = builder.Build();
 
